@@ -11,6 +11,11 @@ stClientData CurrentClient;
 
 const std::string ClientsFilename = "../simplebank/ClientsData.txt";
 
+/* funcation declarations */
+void login();
+void ShowMainMenuOptions();
+
+
 void 
 clearScreen() {
     #ifdef _WIN32
@@ -42,6 +47,70 @@ LoadAccountInfo (std::string AccountNumber, std::string PIN)
     return FindAccountByAccountNumberAndPIN(AccountNumber, PIN, CurrentClient);
 }
 
+
+
+void
+GoBackToMainMenuOptions()
+{
+    #ifdef _WIN32
+        std::cout << "\n\nPress any key to go back to main menu...";
+        system("pause>0");
+        ShowMainMenuOptions();
+    #else
+        system("read -p \"\n\nPress any key to go back to main menu...\"");
+        ShowMainMenuOptions();
+    #endif
+
+}
+
+void
+PerfromMainMenuOption(enMenuOptions MenuOption)
+{
+    switch (MenuOption)
+    {
+    case enMenuOptions::QuickWithdraw:
+        clearScreen();
+        GoBackToMainMenuOptions();
+        break;
+    
+    case enMenuOptions::NormalWithdraw:
+        clearScreen();
+        GoBackToMainMenuOptions();
+        break;
+    case enMenuOptions::Deposit:
+        clearScreen();
+        GoBackToMainMenuOptions();
+        break;
+    case enMenuOptions::CheckBalance:
+        clearScreen();
+        GoBackToMainMenuOptions();
+        break;
+    case enMenuOptions::Logout:
+        clearScreen();
+        login();
+        break;
+ 
+    }
+}
+
+void
+ShowMainMenuOptions()
+{
+    std::string title = "ATM Main Menu Screen";
+    clearScreen();
+    drw::header(title);
+
+    std::cout << "\t[1] Quick withdraw.\n";
+    std::cout << "\t[2] Normal withdraw.\n";
+    std::cout << "\t[3] Deposit.\n";
+    std::cout << "\t[4] Check Balance.\n";
+    std::cout << "\t[5] Logout.\n";
+
+    for (short i = 1; i <= title.length()*3; ++i) { std::cout << drw::divder; }
+    std::cout << std::endl;
+    PerfromMainMenuOption((enMenuOptions)getInfo::short_num("Choose what do you want to do? [1 to 5]"));
+}
+
 void
 login()
 {
@@ -61,7 +130,7 @@ login()
         PINCode = getInfo::string("Enter PIN Code");
     }
     
-
+    ShowMainMenuOptions();
 }
 
 int main()

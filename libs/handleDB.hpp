@@ -17,6 +17,11 @@ stClientData
     bool MarkForDelete = false;
 };
 
+enum enMenuOptions {
+    QuickWithdraw       = 1,    NormalWithdraw  = 2,     Deposit    = 3,
+    CheckBalance        = 4,    Logout          = 5,
+};
+
 
 std::vector<std::string> 
 SplitString(std::string line, std::string delim = "#//#")

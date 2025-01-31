@@ -299,21 +299,23 @@ ShowMainMenuOptions()
 void
 login()
 {
-    std::string title = "Login Screen";
-    clearScreen();
-    drw::header(title);
+    std::string AccountNumber = "";
+    std::string PINCode = "";
+    bool LoginFaild = 0;
 
-    std::string AccountNumber = getInfo::string("Enter Account Number");
-    std::string PINCode = getInfo::string("Enter PIN Code");
-
-    while (!LoadAccountInfo(AccountNumber, PINCode))
-    {
+    do {
         clearScreen();
-        drw::header(title);
-        std::cout << "Invalid Account Number/PINCode!\n";
+        drw::header("Login Screen");
+
+        if (LoginFaild)
+            std::cout << "Invalid Account Number/PINCode!" << std::endl;
+
         AccountNumber = getInfo::string("Enter Account Number");
         PINCode = getInfo::string("Enter PIN Code");
-    }
+
+        LoginFaild = !LoadAccountInfo(AccountNumber, PINCode);
+    } while (LoginFaild);
+
     
     ShowMainMenuOptions();
 }

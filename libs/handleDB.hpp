@@ -48,6 +48,17 @@ SplitString(std::string line, std::string delim = "#//#")
     return vRecords;
 }
 
+std::string 
+ConvertRecordToLine(stClientData ClientData, std::string delim = "#//#")
+{
+    std::string line = "";
+    line += ClientData.AccountNumber + delim;
+    line += ClientData.PINCode + delim;
+    line += ClientData.Name + delim;
+    line += ClientData.PhoneNumber + delim;
+    line += std::to_string(ClientData.AccountBalance);
+    return line;
+}
 
 stClientData 
 ConvertLineToRecord(std::string line)
@@ -65,7 +76,7 @@ ConvertLineToRecord(std::string line)
 }
 
 
-namespace Load {
+namespace LoadData {
     std::vector<stClientData> 
     ClientsDataFromFile(std::string filename)
     {
@@ -85,5 +96,28 @@ namespace Load {
             file.close();
         }
         return vClientsData;
+    }
+}
+
+namespace SaveData {
+    void 
+    ClientsDataToFile(std::vector<stClientData> vClientsData, std::string filename)
+    {
+        std::fstream file;
+        file.open(filename, std::ios::out);
+        if (file.is_open())
+        {
+            std::string line = "";
+            for (stClientData& C : vClientsData)
+            {
+                if (C.MarkForDelete == false)
+                {
+                    line = ConvertRecordToLine(C);
+                    file << line << std::endl;
+                }
+            }
+            file.close();
+        }
+
     }
 }

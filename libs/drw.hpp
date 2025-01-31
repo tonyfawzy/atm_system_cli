@@ -3,10 +3,17 @@
 
 namespace drw {
 
-    const char divder = '-';
+    const char divider_character = '-';
 
     void
-    header(std::string title, char divider_char = divder)
+    divider(std::string title)
+    {
+        for (short i = 1; i <= title.length()*3; ++i) { std::cout << divider_character; }
+        std::cout << std::endl;
+    }
+
+    void
+    header(std::string title, char divider_char = divider_character)
     {
         
         for (short i = 1; i <= title.length()*3; ++i) { std::cout << divider_char; }

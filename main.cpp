@@ -64,6 +64,16 @@ GoBackToMainMenuOptions()
 }
 
 void
+ShowClientBalance()
+{
+    std::string title = "Check Balance Screen";
+    clearScreen();
+    drw::header(title);
+
+    std::cout << "Your Balance is: " << std::to_string(CurrentClient.AccountBalance) << std::endl;
+}
+
+void
 PerfromMainMenuOption(enMenuOptions MenuOption)
 {
     switch (MenuOption)
@@ -83,6 +93,7 @@ PerfromMainMenuOption(enMenuOptions MenuOption)
         break;
     case enMenuOptions::CheckBalance:
         clearScreen();
+        ShowClientBalance();
         GoBackToMainMenuOptions();
         break;
     case enMenuOptions::Logout:

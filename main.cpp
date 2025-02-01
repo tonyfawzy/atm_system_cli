@@ -53,8 +53,6 @@ LoadAccountInfo (std::string AccountNumber, std::string PIN)
     return FindAccountByAccountNumberAndPIN(AccountNumber, PIN, CurrentClient);
 }
 
-
-
 void
 GoBackToQuickWithdrawOptions()
 {
@@ -68,8 +66,6 @@ GoBackToQuickWithdrawOptions()
     #endif
 
 }
-
-
 
 void
 GoBackToMainMenuOptions()
@@ -100,7 +96,6 @@ ShowClientBalance()
     ClientBalance();
 }
 
-
 bool
 PerformDepositByAccountNumber(std::string AccountNumber, double amount, std::vector<stClientData>& vClientsData)
 {
@@ -115,7 +110,6 @@ PerformDepositByAccountNumber(std::string AccountNumber, double amount, std::vec
             {
                 C.AccountBalance += amount;
                 SaveData::ClientsDataToFile(vClientsData, ClientsFilename);
-                CurrentClient.AccountBalance = C.AccountBalance;
                 std::cout << "Done successfully. New balance is: " << C.AccountBalance << std::endl;
                 break;
             }
@@ -127,7 +121,6 @@ PerformDepositByAccountNumber(std::string AccountNumber, double amount, std::vec
     }
 }
 
-
 void
 PerformQuickWithdraw(double amount)
 {
@@ -135,16 +128,14 @@ PerformQuickWithdraw(double amount)
     {
         std::cout << "\nThe amount exceeds your balance, make another choice." << std::endl;
         GoBackToQuickWithdrawOptions();
+        return;
         
     }
 
     std::vector<stClientData> vClientsData = LoadData::ClientsDataFromFile(ClientsFilename);
-
     PerformDepositByAccountNumber(CurrentClient.AccountNumber, amount*-1, vClientsData);
+    CurrentClient.AccountBalance -= amount;
 }
-
-
-
 
 void
 PerfromQuickWithdrawOption (enQuickWithdraw QuickWithdraw)
@@ -212,22 +203,20 @@ ShowQuickWithdrawOptions()
     PerfromQuickWithdrawOption((enQuickWithdraw)getInfo::short_num("Choose what to withdraw from [1] to [8]"));
 }
 
-
 void
 PerformDeposit()
 {
     drw::header("Deposit Screen");
 
-    double amount = getInfo::double_num("Enter a positive deposit amount");
+    double amount = 0;
 
-    while (amount < 0)
-    {
+    do {
         amount = getInfo::double_num("Enter a positive deposit amount");
-    }
+    } while (amount <= 0);
 
     std::vector<stClientData> vClientsData = LoadData::ClientsDataFromFile(ClientsFilename);
-
     PerformDepositByAccountNumber(CurrentClient.AccountNumber, amount, vClientsData);
+    CurrentClient.AccountBalance += amount;
 }
 
 void
@@ -235,14 +224,16 @@ PerformNormalWithdraw()
 {
     drw::header("Normal Withdraw Screen");
     
-    double amount = getInfo::double_num("Enter an amount multiple of 5's");
-    while ((int)amount % 5 != 0)
+    double amount = 0;
+
+    do 
     {
         amount = getInfo::double_num("Enter an amount multiple of 5's");
-    }
+    } while ((int)amount % 5 != 0);
 
     std::vector<stClientData> vClientsData = LoadData::ClientsDataFromFile(ClientsFilename);
     PerformDepositByAccountNumber(CurrentClient.AccountNumber, amount*-1, vClientsData);
+    CurrentClient.AccountBalance -= amount;
 }
 
 void
